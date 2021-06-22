@@ -2,7 +2,7 @@
   "name": "jklorenzo-02",
   "version": "1.0.0",
   "description": "My NodeJS API using Express and mongoDB",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "tsc && node ."
   },
@@ -10,6 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/AY2020-2021-CpE-OJT/JKLorenzo-02.git"
   },
+  "type": "module",
   "author": "Juruel Keanu Lorenzo",
   "license": "ISC",
   "bugs": {
