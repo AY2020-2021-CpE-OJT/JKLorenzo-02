@@ -1,12 +1,12 @@
-import express from 'express';
+import express from "express";
+import Client from "./modules/Client.js";
 
-const app = express();
 const port = process.env.PORT ?? 3000;
+const app = express();
+const client = new Client(app);
 
-app.get('/', (req, res) => {
-    res.send('connected')
+app.listen(port, async () => {
+  console.log(`Server is running on port ${port}. Initializing client....`);
+  await client.initialize();
+  console.log("Client initialized");
 });
-
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}.`)
-})
