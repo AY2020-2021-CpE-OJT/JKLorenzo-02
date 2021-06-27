@@ -41,7 +41,12 @@ export default class Session {
     return this.data.time_out;
   }
 
-  toJSON() {
-    return this.data;
+  toJSON(): SessionData {
+    return {
+      id: this.data.id,
+      description: this.data.description,
+      time_in: this.data.time_in,
+      time_out: this.data.time_out,
+    };
   }
 }
