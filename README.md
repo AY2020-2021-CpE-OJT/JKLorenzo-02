@@ -1,2 +1,2 @@
 # JKLorenzo-02
-My NodeJS API using Express and mongoDB
+An object-oriented approach in implementing the http://dtr.msalvio.com/ api.
