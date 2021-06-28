@@ -1,21 +1,40 @@
 import Client from "../modules/Client.js";
-import Database from "../modules/Database.js";
+import Collection from "@discordjs/collection";
 import Student from "../structures/Student.js";
-import { StudentData } from "../utils/interfaces.js";
 
 export default class StudentManager {
-  readonly client: Client;
-  readonly cache: Map<string, Student>;
+  private client: Client;
+  private cache: Collection<string, Student>;
 
   constructor(client: Client) {
     this.client = client;
-    this.cache = new Map();
+    this.cache = new Collection();
   }
 
-  load(data: StudentData[]) {
-    for (const student_data of data) {
-      const this_student = new Student(this.client, this, student_data);
-      this.cache.set(this_student.id, this_student);
+  get(id: string) {
+    return this.cache.get(id);
+  }
+
+  getAll() {
+    return this.cache.array();
+  }
+
+  update(student: Student) {
+    this.cache.set(student.id, student);
+  }
+
+  async load() {
+    const students = await this.client.database.fetchStudents();
+    for (const student_data of students) {
+      const this_student = new Student(this.client, student_data);
+      this.update(this_student);
     }
+  }
+
+  async logStudent(id: string) {
+    const this_student =
+      this.get(id) ?? new Student(this.client, { id: id, sessions: [] });
+    await this_student.log();
+    return this_student;
   }
 }
