@@ -1,52 +1,34 @@
-import { v4 as uuid } from "uuid";
-import SessionManager from "../managers/SessionManager";
-import Client from "../modules/Client";
-import { SessionData } from "../utils/interfaces";
+import Client from "../modules/Client.js";
+import { LogData, SessionData } from "../utils/interfaces.js";
+import Student from "./Student.js";
 
 export default class Session {
-  readonly client: Client;
-  readonly manager: SessionManager;
-  private data: SessionData;
+  private readonly client: Client;
+  private readonly student: Student;
+  id: string;
+  description?: string;
+  logs: LogData[];
 
-  constructor(client: Client, manager: SessionManager, data: SessionData) {
+  constructor(client: Client, student: Student, data: SessionData) {
     this.client = client;
-    this.manager = manager;
-    this.data = {
-      id: uuid(),
-    };
-    this._patch(data);
+    this.student = student;
+    this.id = data.id;
+    this.description = data.description;
+    this.logs = data.logs;
   }
 
-  _patch(data: SessionData) {
-    if (data.id) this.data.id = data.id;
-    if (data.description) this.data.description = data.description;
-    if (data.time_in) this.data.time_in = data.time_in;
-    if (data.time_out) this.data.time_out = data.time_out;
-    return this;
-  }
-
-  get id() {
-    return this.data.id!;
-  }
-
-  get description() {
-    return this.data.description;
-  }
-
-  get time_in() {
-    return this.data.time_in;
-  }
-
-  get time_out() {
-    return this.data.time_out;
+  async setDescription(content: string) {
+    this.description = content;
+    this.student.sessions.set(this.id, this);
+    await this.client.database.upsertStudent(this.student);
+    return this.student;
   }
 
   toJSON(): SessionData {
     return {
-      id: this.data.id,
-      description: this.data.description,
-      time_in: this.data.time_in,
-      time_out: this.data.time_out,
+      id: this.id,
+      description: this.description,
+      logs: this.logs,
     };
   }
 }
