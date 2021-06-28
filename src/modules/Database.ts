@@ -1,14 +1,27 @@
-import { MongoClient, Db } from "mongodb";
+import mongodb, { MongoClient, Db } from "mongodb";
+import Student from "../structures/Student.js";
 import { SessionData, StudentData } from "../utils/interfaces.js";
+import Client from "./Client.js";
 
 export default class Database {
+  private client: Client;
   private mongo_client: MongoClient;
   private db?: Db;
   private db_name: string;
 
-  constructor(uri: string, name: string) {
-    this.mongo_client = new MongoClient(uri, { useNewUrlParser: true });
+  constructor(client: Client, url: string, name: string) {
+    this.client = client;
+    this.mongo_client = new mongodb.MongoClient(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     this.db_name = name;
+  }
+
+  isConnected(): boolean {
+    if (!this.mongo_client) return false;
+    if (!this.db) return false;
+    return this.mongo_client.isConnected();
   }
 
   async connect(): Promise<void> {
@@ -16,10 +29,8 @@ export default class Database {
     this.db = this.mongo_client.db(this.db_name);
   }
 
-  isConnected(): boolean {
-    if (!this.mongo_client) return false;
-    if (!this.db) return false;
-    return this.mongo_client.isConnected();
+  async disconnect() {
+    await this.mongo_client.close();
   }
 
   async fetchStudents(options?: {
@@ -39,22 +50,31 @@ export default class Database {
     if (options?.limit && options.limit > 0) {
       cursor = cursor.limit(options.limit);
     }
+
     const students = await cursor
-      .map((document) => {
-        return {
-          id: document._id,
-          sessions: Array(document.sessions).map((element) => {
-            return {
-              id: element._id,
-              description: element.description,
-              time_in: element.time_in,
-              time_out: element.time_out,
-            } as SessionData;
-          }),
-        } as StudentData;
-      })
+      .map((student) => ({
+        id: student.id,
+        active_log: student.active_log,
+        sessions: student.sessions,
+      }))
       .toArray();
 
-    return students ?? [];
+    return students;
+  }
+
+  async upsertStudent(student: Student) {
+    const collection = this.db!.collection("students");
+    await collection.updateOne(
+      { id: student.id },
+      {
+        $set: {
+          id: student.id,
+          sessions: student.sessions.map((session) => session.toJSON()),
+          active_log: student.active_log,
+        } as StudentData,
+      },
+      { upsert: true }
+    );
+    this.client.student_manager.update(student);
   }
 }
