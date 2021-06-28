@@ -1,21 +1,29 @@
 import { Express } from "express";
-import StudentManager from "../managers/StudentManager";
-import Database from "./Database";
+import StudentManager from "../managers/StudentManager.js";
+import API from "./API.js";
+import Database from "./Database.js";
 
 export default class Client {
   readonly app: Express;
+  readonly api: API;
   readonly database: Database;
-  readonly students: StudentManager;
+  readonly student_manager: StudentManager;
 
   constructor(app: Express) {
     this.app = app;
-    this.database = new Database(process.env.DB_CREDS!, "students");
-    this.students = new StudentManager(this);
+    this.api = new API(this);
+    this.database = new Database(this, process.env.DB_CREDS!, "students");
+    this.student_manager = new StudentManager(this);
   }
 
   async initialize() {
+    // Connect to the database
     await this.database.connect();
-    const student_data = await this.database.fetchStudents();
-    await this.students.load(student_data);
+
+    // Load the student manager
+    await this.student_manager.load();
+
+    // Start API
+    await this.api.start();
   }
 }
