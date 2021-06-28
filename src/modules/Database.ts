@@ -1,6 +1,6 @@
 import mongodb, { MongoClient, Db } from "mongodb";
 import Student from "../structures/Student.js";
-import { SessionData, StudentData } from "../utils/interfaces.js";
+import { StudentData } from "../utils/interfaces.js";
 import Client from "./Client.js";
 
 export default class Database {
