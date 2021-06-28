@@ -18,11 +18,12 @@
   },
   "homepage": "https://github.com/AY2020-2021-CpE-OJT/JKLorenzo-02#readme",
   "dependencies": {
+    "@discordjs/collection": "^0.1.6",
     "express": "^4.17.1",
-    "mongodb": "^3.6.9",
-    "uuid": "^8.3.2"
+    "mongodb": "^3.6.9"
   },
   "devDependencies": {
+    "@types/collections": "^5.1.2",
     "@types/express": "^4.17.12",
     "@types/mongodb": "^3.6.18",
     "@types/uuid": "^8.3.0",
