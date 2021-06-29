@@ -28,4 +28,4 @@ An object-oriented approach in implementing the http://dtr.msalvio.com/ api.
 |   GET  	| /api/students/:id/sessions      	| SessionData[]                                                      	|           N/A          	|
 |   GET  	| /api/students/:id/sessions/:sid 	| SessionData                                                        	|           N/A          	|
 |  POST  	| /api/students/:id               	| StudentData                                                        	|           N/A          	|
-|  POST  	| /api/students/:id/sessions/:sid 	| StudentData                                                        	| { description: value } 	|
+|  PATCH 	| /api/students/:id/sessions/:sid 	| StudentData                                                        	| { description: value } 	|
