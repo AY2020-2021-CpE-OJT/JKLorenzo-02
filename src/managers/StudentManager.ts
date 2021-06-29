@@ -3,8 +3,8 @@ import Collection from "@discordjs/collection";
 import Student from "../structures/Student.js";
 
 export default class StudentManager {
-  private client: Client;
-  private cache: Collection<string, Student>;
+  private readonly client: Client;
+  private readonly cache: Collection<string, Student>;
 
   constructor(client: Client) {
     this.client = client;

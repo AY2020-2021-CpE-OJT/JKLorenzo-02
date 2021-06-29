@@ -4,8 +4,8 @@ import { StudentData } from "../utils/interfaces.js";
 import Client from "./Client.js";
 
 export default class Database {
-  private client: Client;
-  private mongo_client: MongoClient;
+  private readonly client: Client;
+  private readonly mongo_client: MongoClient;
   private db?: Db;
   private db_name: string;
 
