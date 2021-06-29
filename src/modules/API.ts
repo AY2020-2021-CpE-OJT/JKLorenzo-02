@@ -59,7 +59,7 @@ export default class API {
     });
 
     // Update the description of a session of a student
-    this.app.post("/api/students/:id/sessions/:sid", async (req, res) => {
+    this.app.patch("/api/students/:id/sessions/:sid", async (req, res) => {
       const student = await this.client.student_manager.get(req.params.id);
       if (!student) return res.status(404).send("STUDENT_NOT_FOUND");
       const session = student?.sessions.get(req.params.sid);
