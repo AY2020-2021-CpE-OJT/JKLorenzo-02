@@ -2,8 +2,8 @@ import Client from "./Client.js";
 import express, { Express } from "express";
 
 export default class API {
-  readonly app: Express;
-  readonly client: Client;
+  private readonly app: Express;
+  private readonly client: Client;
 
   constructor(client: Client) {
     this.app = client.app;
