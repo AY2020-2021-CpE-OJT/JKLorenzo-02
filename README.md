@@ -24,7 +24,7 @@ An object-oriented approach in implementing the http://dtr.msalvio.com/ api.
 |:------:	|:-------------------------------:	|:------------------------------------------------------------------:	|:----------------------:	|
 |   GET  	| /api                            	| 'online'                                                           	|           N/A          	|
 |   GET  	| /api/students                   	| {  students: StudentData[],   length: number }                     	|           N/A          	|
-|   GET  	| /api/students/:id               	| {  id: string,   sessions: SessionData[],   active_log?: LogData } 	|           N/A          	|
+|   GET  	| /api/students/:id               	| StudentData                                                        	|           N/A          	|
 |   GET  	| /api/students/:id/sessions      	| SessionData[]                                                      	|           N/A          	|
 |   GET  	| /api/students/:id/sessions/:sid 	| SessionData                                                        	|           N/A          	|
 |  POST  	| /api/students/:id               	| StudentData                                                        	|           N/A          	|
